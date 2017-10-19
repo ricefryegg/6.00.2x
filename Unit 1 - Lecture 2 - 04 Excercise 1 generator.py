@@ -9,7 +9,7 @@ def powerSet(items):
             # test bit jth of integer i
             # ">>" is one bit right move in binary, equals divde 2**j
             # mod used to present last digit of the binary
-            # check jth digit from the right, if 1 take it
+            # check jth digit of integer i, if 1 take it
             if (i >> j) % 2 == 1:
                 combo.append(items[j])
         yield combo
