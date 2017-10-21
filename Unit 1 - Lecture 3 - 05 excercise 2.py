@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on ###### Sat Oct 21 19:18:32 CST 2017
+Created on ###### Sat Oct 21 19:22:58 CST 2017
 
 @author: amblizer
 """
@@ -68,24 +68,30 @@ class Graph(Digraph):
         rev = Edge(edge.getDestination(), edge.getSource())
         Digraph.addEdge(self, rev)
 
+# build graph nodes and edges in excersice 2
+def buildCityGraph():
+    # add nodes
+    nodes = []
+    nodes.append(Node("ABC")) # nodes[0]
+    nodes.append(Node("ACB")) # nodes[1]
+    nodes.append(Node("BAC")) # nodes[2]
+    nodes.append(Node("BCA")) # nodes[3]
+    nodes.append(Node("CAB")) # nodes[4]
+    nodes.append(Node("CBA")) # nodes[5]
 
-# use graphtype chosing graph or diagraph
-def buildCityGraph(graphType):
-    g = graphType()
-    for name in ('Boston', 'Providence', 'New York', 'Chicago',
-                 'Denver', 'Phoenix', 'Los Angeles'): #Create 7 nodes
-        g.addNode(Node(name))
-    g.addEdge(Edge(g.getNode('Boston'), g.getNode('Providence')))
-    g.addEdge(Edge(g.getNode('Boston'), g.getNode('New York')))
-    g.addEdge(Edge(g.getNode('Providence'), g.getNode('Boston')))
-    g.addEdge(Edge(g.getNode('Providence'), g.getNode('New York')))
-    g.addEdge(Edge(g.getNode('New York'), g.getNode('Chicago')))
-    g.addEdge(Edge(g.getNode('Chicago'), g.getNode('Denver')))
-    g.addEdge(Edge(g.getNode('Denver'), g.getNode('Phoenix')))
-    g.addEdge(Edge(g.getNode('Denver'), g.getNode('New York')))
-    g.addEdge(Edge(g.getNode('Los Angeles'), g.getNode('Boston')))
+    # build graph forward and backward
+    g = Graph()
+    for n in nodes:
+        g.addNode(n)
+    
+    # add edges
+    g.addEdge(Edge(g.getNode('ABC'),g.getNode('BAC')))
+    g.addEdge(Edge(g.getNode('ABC'),g.getNode('ACB')))
+    g.addEdge(Edge(g.getNode('BCA'),g.getNode('CBA')))
+    g.addEdge(Edge(g.getNode('BCA'),g.getNode('BAC')))
+    g.addEdge(Edge(g.getNode('CAB'),g.getNode('ACB')))
+    g.addEdge(Edge(g.getNode('CAB'),g.getNode('CBA')))
+
     return g
 
-print(buildCityGraph(Graph))
-print()
-print(buildCityGraph(Digraph))
+print(buildCityGraph())
