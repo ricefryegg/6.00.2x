@@ -73,6 +73,7 @@ def greedy_cow_transport(cows,limit=10):
         totalTrip.append(currentTrip)
         weight = 0
     return totalTrip
+    # p.s. greedy algorithm not always generate the optimal solution
 
 # Problem 2
 def brute_force_cow_transport(cows,limit=10):
