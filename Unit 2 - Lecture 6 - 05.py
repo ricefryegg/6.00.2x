@@ -146,7 +146,48 @@ def simDrunk(numTrials, dClass, walkLengths):
         mean = sum(trials) / len(trials)
         meanDistances.append(mean)
     return meanDistances
-        
-# test
-numSteps = (10, 100, 1000, 10000)
-simAll((UsualDrunk, ColdDrunk), numSteps, 100)
+
+# exact locations
+def getFinalLocs(numSteps, numTrials,dClass):
+    locs = []
+    d = dClass
+    for t in range(numTrials):
+        f = Field()
+        f.addDrunk(d, Location(0, 0))
+        for s in range(numSteps):
+            f.moveDrunk(d)
+        locs.append(f.getLoc(d))
+    return locs
+
+# plotting exact location
+def plotLocs(drunkKinds, numSteps, numTrials):
+    styleChoice = styleIterator(('k+', 'r^', 'mo'))
+    for dClass in drunkKinds:
+        locs = getFinalLocs(numSteps, numTrials, dClass)
+        xVals, yVals = [], []
+        for loc in locs:
+            xVals.append(loc.getX())
+            yVals.append(loc.getY())
+        xVals = pylab.array(xVals)
+        yVals = pylab.array(yVals)
+        meanX = sum(abs(xVals)) / len(xVals)
+        meanY = sum(abs(yVals)) / len(yVals) 
+        curStyle = styleChoice.nextStyle()
+        pylab.plot(xVals, yVals, curStyle,
+                      label = dClass.__name__ +\
+                      ' mean abs dist = <'
+                      + str(meanX) + ', ' + str(meanY) + '>')
+    pylab.title('Location at End of Walks ('
+                + str(numSteps) + ' steps)')
+    pylab.ylim(-1000, 1000)
+    pylab.xlim(-1000, 1000)
+    pylab.xlabel('Steps East/West of Origin')
+    pylab.ylabel('Steps North/South of Origin')
+    pylab.legend(loc = 'upper left')
+
+# test simulation
+# numSteps = (10, 100, 1000, 10000)
+# simAll((UsualDrunk, ColdDrunk), numSteps, 100)
+
+# test location plotting
+plotLocs((UsualDrunk, ColdDrunk), 10000, 1000)
