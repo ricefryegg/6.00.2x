@@ -108,14 +108,20 @@ def drunkTest(walkLengths, numTrials, dClass):
 #     for dClass in drunkKinds:
 #         drunkTest(walkLengths, numTrials, dClass)
 
-# iter according to style
+# iter according to style, draw plot
 def simAll(drunkKinds, walkLengths, numTrials):
+    import pylab
     styleChoice = styleIterator(('m-', 'b--', 'g-.'))
     for dClass in drunkKinds:
         curStyle = styleChoice.nextStyle()
         print('Starting simulation of ', dClass.__name__)
         means = simDrunk(numTrials, dClass, walkLengths)
         pylab.plot(walkLengths, means, curStyle, label = dClass.__name__)
+    pylab.title('Mean Distance from Origin (' + str(numTrials) + ' trials)')
+    pylab.xlabel('Number of Steps')
+    pylab.ylabel('Distance from Origin')
+    pylab.legend(loc = 'best')
+    pylab.show()
 
 
 # iterating over styles
@@ -126,7 +132,7 @@ class styleIterator(object):
     def nextStyle(self):
         # the last style
         result = self.styles[self.index]
-        if self.index = len(self.styles) - 1:
+        if self.index == len(self.styles) - 1:
             self.index = 0
         else:
             self.index += 1
@@ -137,8 +143,10 @@ def simDrunk(numTrials, dClass, walkLengths):
     for numSteps in walkLengths:
         print('Starting sinulation of', numSteps, 'steps')
         trials = simWalks(numSteps, numTrials, dClass)
-        mean = sun(trials) / len(trials)
+        mean = sum(trials) / len(trials)
         meanDistances.append(mean)
     return meanDistances
         
 # test
+numSteps = (10, 100, 1000, 10000)
+simAll((UsualDrunk, ColdDrunk), numSteps, 100)
