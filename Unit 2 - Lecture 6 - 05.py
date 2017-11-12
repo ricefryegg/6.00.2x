@@ -188,9 +188,54 @@ def plotLocs(drunkKinds, numSteps, numTrials):
     pylab.legend(loc = 'upper left')
     pylab.show()
 
+class Oddfield(Field):
+    def __init__(self, numHoles = 1000,
+                    xRange = 100, yRange = 100):
+        Field.__init__(self)
+        self.wormholes = {}
+        for w in range(numHoles):
+            x = random.randint(-xRange, xRange)
+            y = random.randint(-yRange, yRange)
+            newX = random.randint(-xRange, xRange)
+            newY = random.randint(-yRange, yRange)
+            newLoc = Location(newX, newY)
+            self.wormholes[(x, y)] = newLoc
+    def moveDrunk(self, drunk):     # overlap the func in Field
+        Field.moveDrunk(self, drunk)
+        x = self.drunks[drunk].getX()
+        y = self.drunks[drunk].getY()
+        if (x, y) in self.wormholes:
+            self.drunks[drunk] = self.wormholes[(x, y)]
+
+
+def traceWalk(fieldKinds, numSteps):
+    styleChoice = styleIterator(('b+', 'r^', 'ko'))
+    for fClass in fieldKinds:
+        d = UsualDrunk()
+        f = fClass()
+        f.addDrunk(d, Location(0, 0))
+        locs = []
+        for s in range(numSteps):
+            f.moveDrunk(d)
+            locs.append(f.getLoc(d))
+        xVals, yVals = [], []
+        for loc in locs:
+            xVals.append(loc.getX())
+            yVals.append(loc.getY())
+        curStyle = styleChoice.nextStyle()
+        pylab.plot(xVals, yVals, curStyle, label = fClass.__name__)
+    pylab.title('Spots Visited on Walk(' + str(numSteps) + ' steps')
+    pylab.xlabel('Steps East/West of Origin')
+    pylab.ylabel('Steps North/South of Origin')
+    pylab.legend(loc = 'best')
+    pylab.show()
+
 # test simulation
 # numSteps = (10, 100, 1000, 10000)
 # simAll((UsualDrunk, ColdDrunk), numSteps, 100)
 
 # test location plotting
-plotLocs((UsualDrunk, ColdDrunk), 10000, 1000)
+# plotLocs((UsualDrunk, ColdDrunk), 10000, 1000)
+
+# test OddField
+traceWalk((Field, Oddfield), 500)
