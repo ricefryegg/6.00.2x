@@ -1,3 +1,5 @@
+import pylab
+
 class Location(object):
     def __init__(self, x, y):
         """
@@ -18,7 +20,7 @@ class Location(object):
         ox = other.x
         oy = other.y
         xDist = self.x - ox
-        yDist = self.x - oy
+        yDist = self.y - oy
         return (xDist**2 + yDist**2)**0.5
     def __str__(self):
         return '<' + str(self.x) + ', ' + str(self.y) + '>'
@@ -150,7 +152,7 @@ def simDrunk(numTrials, dClass, walkLengths):
 # exact locations
 def getFinalLocs(numSteps, numTrials,dClass):
     locs = []
-    d = dClass
+    d = dClass()
     for t in range(numTrials):
         f = Field()
         f.addDrunk(d, Location(0, 0))
@@ -184,6 +186,7 @@ def plotLocs(drunkKinds, numSteps, numTrials):
     pylab.xlabel('Steps East/West of Origin')
     pylab.ylabel('Steps North/South of Origin')
     pylab.legend(loc = 'upper left')
+    pylab.show()
 
 # test simulation
 # numSteps = (10, 100, 1000, 10000)
