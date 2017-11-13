@@ -164,8 +164,8 @@ class RectangularRoom(object):
         return True
 
 # test
-test = RectangularRoom(7,8)
-print(test.isPositionInRoom(Position(0.10, 0.00)))
+# test = RectangularRoom(7,8)
+# print(test.isPositionInRoom(Position(0.10, 0.00)))
 
 
 # === Problem 2
@@ -188,7 +188,9 @@ class Robot(object):
         room:  a RectangularRoom object.
         speed: a float (speed > 0)
         """
-        raise NotImplementedError
+        self.room = room
+        self.speed = speed
+        self.position = 
 
     def getRobotPosition(self):
         """
