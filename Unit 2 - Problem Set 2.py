@@ -81,8 +81,12 @@ class RectangularRoom(object):
 
         width: an integer > 0
         height: an integer > 0
+
+        cleanTile: a list of cleaned positions
         """
-        raise NotImplementedError
+        self.width = width
+        self.height = height
+        self.cleanTile = []
     
     def cleanTileAtPosition(self, pos):
         """
@@ -92,7 +96,12 @@ class RectangularRoom(object):
 
         pos: a Position
         """
-        raise NotImplementedError
+        # reduce decimal to the whole digit
+        xVal = int(pos.getX())
+        yVal = int(pos.getY())
+        exactPos = (xVal, yVal)
+        if exactPos not in self.cleanTile:
+            self.cleanTile.append(exactPos)
 
     def isTileCleaned(self, m, n):
         """
@@ -104,7 +113,10 @@ class RectangularRoom(object):
         n: an integer
         returns: True if (m, n) is cleaned, False otherwise
         """
-        raise NotImplementedError
+        currentPos = (m, n)
+        if currentPos in self.cleanTile:
+            return True
+        return False
     
     def getNumTiles(self):
         """
@@ -112,7 +124,7 @@ class RectangularRoom(object):
 
         returns: an integer
         """
-        raise NotImplementedError
+        return self.width * self.height
 
     def getNumCleanedTiles(self):
         """
@@ -120,7 +132,8 @@ class RectangularRoom(object):
 
         returns: an integer
         """
-        raise NotImplementedError
+        # return len(self.cleanTile), self.cleanTile
+        return len(self.cleanTile)
 
     def getRandomPosition(self):
         """
@@ -128,7 +141,10 @@ class RectangularRoom(object):
 
         returns: a Position object.
         """
-        raise NotImplementedError
+        xPos = random.random()*3
+        yPos = random.random()*3
+        randomPos = Position(xPos, yPos)
+        return randomPos
 
     def isPositionInRoom(self, pos):
         """
@@ -137,7 +153,19 @@ class RectangularRoom(object):
         pos: a Position object.
         returns: True if pos is in the room, False otherwise.
         """
-        raise NotImplementedError
+        xVal = pos.getX()
+        yVal = pos.getY()
+        if (xVal or yVal) < 0:
+            return False
+        elif xVal >= self.width:
+            return False
+        elif yVal >= self.height:
+            return False
+        return True
+
+# test
+test = RectangularRoom(7,8)
+print(test.isPositionInRoom(Position(0.10, 0.00)))
 
 
 # === Problem 2
