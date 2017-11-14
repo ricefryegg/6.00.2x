@@ -191,6 +191,8 @@ class Robot(object):
         self.room = room
         self.speed = speed
         self.roboPosition = room.getRandomPosition()
+        # clean initial position
+        self.room.cleanTileAtPosition(self.roboPosition)
         self.roboDirection = random.randrange(360)
 
     def getRobotPosition(self):
@@ -244,7 +246,7 @@ class StandardRobot(Robot):
 
     At each time-step, a StandardRobot attempts to move in its current
     direction; when it would hit a wall, it *instead* chooses a new direction
-    randomly.
+    randomly.(not move further)
     """
     def updatePositionAndClean(self):
         """
@@ -253,37 +255,31 @@ class StandardRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        while True:
-            # get current status
-            curAngle = self.getRobotDirection()
-            curSpeed = self.speed
-            curPosition = self.getRobotPosition()
-            # get next position on the original direction
-            nextPosition = self.getRobotPosition().getNewPosition(curAngle,curSpeed)
-            print(nextPosition.getX(), nextPosition.getY())
-            # check if next position outside the room
-            if not self.room.isPositionInRoom(nextPosition):
-                #set new direction
-                self.setRobotDirection(random.randrange(360))
-            # check if nextposition cleaned
-            elif self.room.isTileCleaned(int(curPosition.getX()), int(curPosition.getY())):
-                #set new direction
-                self.setRobotDirection(random.randrange(360))
-            else:
-                # move and clean the next tile
-                self.setRobotPosition(nextPosition)
+        # get current status
+        curAngle = self.getRobotDirection()
+        curSpeed = self.speed
+        curPosition = self.getRobotPosition()
+        # get next possible position
+        nextPosition = curPosition.getNewPosition(curAngle, curSpeed)
+        # move to the new position if within the room
+        if self.room.isPositionInRoom(nextPosition):
+            self.setRobotPosition(nextPosition)
+            if not self.room.isTileCleaned(int(nextPosition.getX()),int(nextPosition.getY())):
                 self.room.cleanTileAtPosition(nextPosition)
+        else:
+            self.setRobotDirection(random.randrange(360))
+
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-#testRobotMovement(StandardRobot, RectangularRoom)
-room = RectangularRoom(4,5)
-speed = 1
-test = StandardRobot(room, speed)
-print(test.getRobotPosition())
-for i in range(10):
-    test.updatePositionAndClean()
-    print(test.getRobotPosition())
+testRobotMovement(StandardRobot, RectangularRoom)
+# room = RectangularRoom(4,5)
+# speed = 1
+# test = StandardRobot(room, speed)
+# print(test.getRobotPosition())
+# for i in range(2):
+#     test.updatePositionAndClean()
+#     print(test.getRobotPosition())
 
 
 # === Problem 4
