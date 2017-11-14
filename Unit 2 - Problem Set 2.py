@@ -237,6 +237,7 @@ class Robot(object):
 
 
 # === Problem 3
+# create different classs of robots' inheritance can reduce duplicated code
 class StandardRobot(Robot):
     """
     A StandardRobot is a Robot with the standard movement strategy.
@@ -252,11 +253,24 @@ class StandardRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        raise NotImplementedError
+        curAngle = self.getRobotDirection()
+        curSpeed = self.speed
+        curPosition = self.getRobotPosition()
+        x, y = curPosition.getX(), curPosition.getY()
+        while True:
+            if (self.room.isTileCleaned(int(x), int(y))) or (not self.room.isPositionInRoom(curPosition)):
+                self.setRobotDirection(random.randrange(360))
+                curAngle = self.getRobotDirection()
+                curPosition
+                curPosition = self.setRobotDirection()
+                x, y = curPosition.getX(), curPosition.getY()
+            else:
+                break
+        self.room.cleanTileAtPosition(curPosition)
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-##testRobotMovement(StandardRobot, RectangularRoom)
+testRobotMovement(StandardRobot, RectangularRoom)
 
 
 # === Problem 4
