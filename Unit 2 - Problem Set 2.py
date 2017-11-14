@@ -253,24 +253,37 @@ class StandardRobot(Robot):
         Move the robot to a new position and mark the tile it is on as having
         been cleaned.
         """
-        curAngle = self.getRobotDirection()
-        curSpeed = self.speed
-        curPosition = self.getRobotPosition()
-        x, y = curPosition.getX(), curPosition.getY()
         while True:
-            if (self.room.isTileCleaned(int(x), int(y))) or (not self.room.isPositionInRoom(curPosition)):
+            # get current status
+            curAngle = self.getRobotDirection()
+            curSpeed = self.speed
+            curPosition = self.getRobotPosition()
+            # get next position on the original direction
+            nextPosition = self.getRobotPosition().getNewPosition(curAngle,curSpeed)
+            print(nextPosition.getX(), nextPosition.getY())
+            # check if next position outside the room
+            if not self.room.isPositionInRoom(nextPosition):
+                #set new direction
                 self.setRobotDirection(random.randrange(360))
-                curAngle = self.getRobotDirection()
-                curPosition
-                curPosition = self.setRobotDirection()
-                x, y = curPosition.getX(), curPosition.getY()
+            # check if nextposition cleaned
+            elif self.room.isTileCleaned(int(curPosition.getX()), int(curPosition.getY())):
+                #set new direction
+                self.setRobotDirection(random.randrange(360))
             else:
-                break
-        self.room.cleanTileAtPosition(curPosition)
+                # move and clean the next tile
+                self.setRobotPosition(nextPosition)
+                self.room.cleanTileAtPosition(nextPosition)
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-testRobotMovement(StandardRobot, RectangularRoom)
+#testRobotMovement(StandardRobot, RectangularRoom)
+room = RectangularRoom(4,5)
+speed = 1
+test = StandardRobot(room, speed)
+print(test.getRobotPosition())
+for i in range(10):
+    test.updatePositionAndClean()
+    print(test.getRobotPosition())
 
 
 # === Problem 4
