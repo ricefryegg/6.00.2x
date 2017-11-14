@@ -190,7 +190,8 @@ class Robot(object):
         """
         self.room = room
         self.speed = speed
-        self.position = 
+        self.roboPosition = room.getRandomPosition()
+        self.roboDirection = random.randrange(360)
 
     def getRobotPosition(self):
         """
@@ -198,7 +199,7 @@ class Robot(object):
 
         returns: a Position object giving the robot's position.
         """
-        raise NotImplementedError
+        return self.roboPosition
     
     def getRobotDirection(self):
         """
@@ -207,7 +208,7 @@ class Robot(object):
         returns: an integer d giving the direction of the robot as an angle in
         degrees, 0 <= d < 360.
         """
-        raise NotImplementedError
+        return self.roboDirection
 
     def setRobotPosition(self, position):
         """
@@ -215,7 +216,7 @@ class Robot(object):
 
         position: a Position object.
         """
-        raise NotImplementedError
+        self.roboPosition = position
 
     def setRobotDirection(self, direction):
         """
@@ -223,7 +224,7 @@ class Robot(object):
 
         direction: integer representing an angle in degrees
         """
-        raise NotImplementedError
+        self.roboDirection = direction
 
     def updatePositionAndClean(self):
         """
