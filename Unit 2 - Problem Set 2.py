@@ -246,7 +246,7 @@ class StandardRobot(Robot):
 
     At each time-step, a StandardRobot attempts to move in its current
     direction; when it would hit a wall, it *instead* chooses a new direction
-    randomly.(not move further)
+    randomly.(/*not move further*/)
     """
     def updatePositionAndClean(self):
         """
@@ -272,7 +272,7 @@ class StandardRobot(Robot):
 
 
 # Uncomment this line to see your implementation of StandardRobot in action!
-testRobotMovement(StandardRobot, RectangularRoom)
+# testRobotMovement(StandardRobot, RectangularRoom)
 # room = RectangularRoom(4,5)
 # speed = 1
 # test = StandardRobot(room, speed)
@@ -301,10 +301,24 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     robot_type: class of robot to be instantiated (e.g. StandardRobot or
                 RandomWalkRobot)
     """
-    raise NotImplementedError
+    # create multirobots
+    def runSingleSimulation(num_robots, speed, width, height, min_coverage, robot_type):
+        room = RectangularRoom(width, height)
+        timeStep = 0
+        while room.getNumCleanedTiles/room.getNumTiles < min_coverage:
+            for i in range(num_robots):
+                robo[i] = robot_type(room, speed)
+                robo[i].updatePositionAndClean()
+                timeStep += 1
+        return timeStep
+    # iterations
+    timeStepList = []
+    for i in range(num_trials):
+        timeStepList.append(runSingleSimulation(num_robots, speed, width, height, min_coverage, robot_type))
+    return sum(timeStepList) / num_trials
 
 # Uncomment this line to see how much your simulation takes on average
-##print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
 
 
 # === Problem 5
@@ -321,7 +335,6 @@ class RandomWalkRobot(Robot):
         been cleaned.
         """
         raise NotImplementedError
-
 
 def showPlot1(title, x_label, y_label):
     """
