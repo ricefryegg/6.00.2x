@@ -269,8 +269,6 @@ class StandardRobot(Robot):
         else:
             self.setRobotDirection(random.randrange(360))
 
-
-
 # Uncomment this line to see your implementation of StandardRobot in action!
 # testRobotMovement(StandardRobot, RectangularRoom)
 # room = RectangularRoom(4,5)
@@ -301,24 +299,26 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
     robot_type: class of robot to be instantiated (e.g. StandardRobot or
                 RandomWalkRobot)
     """
-    # create multirobots
-    def runSingleSimulation(num_robots, speed, width, height, min_coverage, robot_type):
-        room = RectangularRoom(width, height)
-        timeStep = 0
-        while room.getNumCleanedTiles/room.getNumTiles < min_coverage:
-            for i in range(num_robots):
-                robo[i] = robot_type(room, speed)
-                robo[i].updatePositionAndClean()
-                timeStep += 1
-        return timeStep
-    # iterations
-    timeStepList = []
+    timeStep = 0
     for i in range(num_trials):
-        timeStepList.append(runSingleSimulation(num_robots, speed, width, height, min_coverage, robot_type))
-    return sum(timeStepList) / num_trials
+        # initialize room and robots
+        room = RectangularRoom(width, height)
+        robots = []
+        for j in range(num_robots):
+            # no need include initial into timestep
+            robots.append(robot_type(room, speed))
+        # see if  ratio meet demand
+        while room.getNumCleanedTiles()/room.getNumTiles() < min_coverage:
+            for robot in robots:
+                robot.updatePositionAndClean()
+                timeStep += 1
+    return timeStep/num_trials
+
 
 # Uncomment this line to see how much your simulation takes on average
 print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
+print(runSimulation(1, 1.0, 5, 5, 1, 30, StandardRobot))
+print(runSimulation(1, 1.0, 10, 10, 0.9, 30, StandardRobot))
 
 
 # === Problem 5
