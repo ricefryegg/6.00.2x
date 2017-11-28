@@ -11,11 +11,11 @@ import pylab
 ##################
 
 # For Python 3.5:
-from ps2_verify_movement35 import testRobotMovement
+# from ps2_verify_movement35 import testRobotMovement
 # If you get a "Bad magic number" ImportError, you are not using Python 3.5 
 
 # For Python 3.6:
-# from ps2_verify_movement36 import testRobotMovement
+from ps2_verify_movement36 import testRobotMovement
 # If you get a "Bad magic number" ImportError, you are not using Python 3.6
 
 
@@ -308,16 +308,16 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
             # no need include initial into timestep
             robots.append(robot_type(room, speed))
         # see if  ratio meet demand
-        while room.getNumCleanedTiles()/room.getNumTiles() < min_coverage:
+        while (room.getNumCleanedTiles()/room.getNumTiles()) < min_coverage:
             for robot in robots:
                 robot.updatePositionAndClean()
-                timeStep += 1
+            timeStep += 1
     return timeStep/num_trials
 
 
 # Uncomment this line to see how much your simulation takes on average
-print(runSimulation(1, 1.0, 10, 10, 0.75, 30, StandardRobot))
-print(runSimulation(1, 1.0, 5, 5, 1, 30, StandardRobot))
+print(runSimulation(2, 1.0, 5, 5, 0.78, 30, StandardRobot))
+print(runSimulation(1, 1.0, 5, 5, 0.78, 30, StandardRobot))
 print(runSimulation(1, 1.0, 10, 10, 0.9, 30, StandardRobot))
 
 
