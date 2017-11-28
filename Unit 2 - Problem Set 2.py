@@ -316,9 +316,9 @@ def runSimulation(num_robots, speed, width, height, min_coverage, num_trials,
 
 
 # Uncomment this line to see how much your simulation takes on average
-print(runSimulation(2, 1.0, 5, 5, 0.78, 30, StandardRobot))
-print(runSimulation(1, 1.0, 5, 5, 0.78, 30, StandardRobot))
-print(runSimulation(1, 1.0, 10, 10, 0.9, 30, StandardRobot))
+# print(runSimulation(2, 1.0, 5, 5, 0.78, 30, StandardRobot))
+# print(runSimulation(1, 1.0, 5, 5, 0.78, 30, StandardRobot))
+# print(runSimulation(1, 1.0, 10, 10, 0.9, 30, StandardRobot))
 
 
 # === Problem 5
@@ -340,12 +340,16 @@ class RandomWalkRobot(Robot):
         curPosition = self.getRobotPosition()
         # get next possible position
         nextPosition = curPosition.getNewPosition(curAngle, curSpeed)
-        # chooses a new direction at random at the end of each time-step
-        self.setRobotPosition(nextPosition)
-        if not self.room.isTileCleaned(int(nextPosition.getX()),int(nextPosition.getY())):
-            self.room.cleanTileAtPosition(nextPosition)
-        self.setRobotDirection(random.randrange(360))
+        # move to the new position if within the room
+        if self.room.isPositionInRoom(nextPosition):
+            self.setRobotPosition(nextPosition)
+            if not self.room.isTileCleaned(int(nextPosition.getX()),int(nextPosition.getY())):
+                self.room.cleanTileAtPosition(nextPosition)
+            self.setRobotDirection(random.randrange(360))
 
+print(runSimulation(2, 1.0, 5, 5, 0.78, 30, RandomWalkRobot))
+print(runSimulation(1, 1.0, 5, 5, 0.78, 30, RandomWalkRobot))
+print(runSimulation(1, 1.0, 10, 10, 0.9, 30, RandomWalkRobot))
 
 def showPlot1(title, x_label, y_label):
     """
