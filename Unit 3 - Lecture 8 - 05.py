@@ -43,3 +43,20 @@ def estPi(precision, numTrails):
     return curEst
 
 estPi(0.005, 100)
+
+
+import pylab
+# integral of sin(x), copied
+def integrate(f, a, b, step):
+    yVals, xVals = [], []
+    xVal = a
+    while xVal < b:
+        xVals.append(xVal)
+        yVals.append(f(xVal))
+        xVal += step
+    pylab.plot(xVals, yVals)
+    pylab.title('sin(x)')
+    pylab.xlim(a, b)
+    xUnder, yUnders, xOver, yOvers = [], [], [], []
+    for i in range(500):
+        xVal = 
