@@ -46,7 +46,7 @@ estPi(0.005, 100)
 
 
 import pylab
-# integral of sin(x), copied
+# integral of func[f] from a to b copied
 def integrate(f, a, b, step):
     yVals, xVals = [], []
     xVal = a
