@@ -42,10 +42,10 @@ def estPi(precision, numTrails):
         numNeedles *= 2
     return curEst
 
-estPi(0.005, 100)
+# estPi(0.005, 100)
 
 
-import pylab
+import pylab, numpy, math
 # integral of func[f] from a to b copied
 def integrate(f, a, b, step):
     yVals, xVals = [], []
@@ -57,6 +57,24 @@ def integrate(f, a, b, step):
     pylab.plot(xVals, yVals)
     pylab.title('sin(x)')
     pylab.xlim(a, b)
-    xUnder, yUnders, xOver, yOvers = [], [], [], []
+    xUnders, yUnders, xOvers, yOvers = [], [], [], []
     for i in range(500):
-        xVal = 
+        xVal = random.uniform(a, b)
+        yVal = random.uniform(0, 1)
+        if yVal < f(xVal):
+            xUnders.append(xVal)
+            yUnders.append(yVal)
+        else:
+            xOvers.append(xVal)
+            yOvers.append(yVal)
+    pylab.plot(xUnders, yUnders, 'ro')
+    pylab.plot(xOvers, yOvers, 'ko')
+    pylab.xlim(a, b)
+    ratio = len(xUnders)/(len(xUnders) + len(yUnders))
+    print(ratio)
+    print(ratio*b)
+
+def one(x):
+    return 0.9
+
+integrate(one, 0, math.pi, 0.001)
