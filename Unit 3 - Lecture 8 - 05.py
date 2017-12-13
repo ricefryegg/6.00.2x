@@ -78,4 +78,32 @@ def integrate(f, a, b, step):
 def one(x):
     return numpy.sin(x)
 
-integrate(one, 0, math.pi, 0.0001)
+# integrate(one, 0, math.pi, 0.0001)
+
+
+# Exercise 4
+import random
+
+def noReplacementSimulation(numTrials):
+    '''
+    Runs numTrials trials of a Monte Carlo simulation
+    of drawing 3 balls out of a bucket containing
+    3 red and 3 green balls. Balls are not replaced once
+    drawn. Returns the a decimal - the fraction of times 3 
+    balls of the same color were drawn.
+    '''
+    same = 0
+    for i in range(numTrials):
+        bucket = [0, 0, 0, 1, 1, 1]     # 0 for green and 1 for red
+        select = []
+        for n in range(3):
+            select.append(random.choice(bucket))
+            bucket.remove(select[-1])
+        # print(select)
+        if select[0] == select[1] and select[1] == select[2]:
+            same += 1
+    return same / numTrials
+
+# test
+test = noReplacementSimulation(10)
+print(test)
