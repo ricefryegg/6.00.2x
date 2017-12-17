@@ -127,5 +127,107 @@ def showErrorBars(population, sizes, numTrials):
     pylab.show()
 
 # test
-population = getHighs()
-showErrorBars(population, (50, 100, 200, 300, 400, 500, 600), 50)
+# population = getHighs()
+# showErrorBars(population, (50, 100, 200, 300, 400, 500, 600), 50)
+
+
+# Standart Error
+def sem(popSD, sampleSize):
+    return popSD/sampleSize**0.5
+
+# test the coordination of SEM and PopSD
+# random.seed(0)
+# sampleSize = (25, 50, 100, 200, 300, 400, 500, 600)
+# numTrials = 50
+# population = getHighs()
+# popSD = numpy.std(population)
+# sems = []
+# sampleSDs = []
+# for size in sampleSize:
+#     sems.append(sem(popSD, size))   # get sems of diff sizes
+#     means = []
+#     for t in range(numTrials):
+#         sample = random.sample(population, size)
+#         means.append(sum(sample)/len(sample))
+#     sampleSDs.append(numpy.std(means))  # get std of means of diff sizes
+# pylab.plot(sampleSize, sampleSDs, label='Std of 50 sample means')
+# pylab.plot(sampleSize, sems, 'r--', label='SEM by def')
+# pylab.title('SEM vs. SD of sample means')
+# pylab.legend()
+# pylab.show()
+
+
+# get SDs diff between population and sample
+def getDiffs(population, sampleSizes):
+    popStd = numpy.std(population)
+    diffsFracs = []
+    for sampleSize in sampleSizes:
+        diffs = []
+        for t in range(100):
+            sample = random.sample(population, sampleSize)
+            diffs.append(abs(popStd - numpy.std(sample)))
+        diffMean = sum(diffs)/len(diffs)
+        diffsFracs.append(diffMean/popStd)
+    return pylab.array(diffsFracs)*100  # percentage
+
+# show diff
+def plotDiffs(sampleSizes, diffs, title, label):
+    pylab.plot(sampleSizes, diffs, label=label)
+    pylab.xlabel('Sample Size')
+    pylab.ylabel('% Difference in SD')
+    pylab.title(title)
+    pylab.legend()
+
+
+# show three distributions
+random.seed(0)
+def plotDistributions():
+    uniform, normal, exp = [], [], []
+    for i in range(100000):
+        uniform.append(random.random())
+        normal.append(random.gauss(0,1))
+        exp.append(random.expovariate(0.5))
+    makeHist(uniform, 'Uniform', 'Value', 'Frequency')
+    pylab.figure()  # init new fig windows
+    makeHist(normal, 'Gaussian', 'Value', 'Frequency')
+    pylab.figure()  # init new fig windows
+    makeHist(exp, 'Exponential', 'Value', 'Frequency')
+    pylab.show()
+# test
+# plotDistributions()
+
+# compare influences of distributions
+def compareDists():
+    uniform, normal, exp = [], [], []
+    for i in range(100000):
+        uniform.append(random.random())
+        normal.append(random.gauss(0,1))
+        exp.append(random.expovariate(0.5))
+    sampleSizes = range(20, 600, 1)
+    udiffs = getDiffs(uniform, sampleSizes)
+    ndiffs = getDiffs(normal, sampleSizes)
+    ediffs = getDiffs(exp, sampleSizes)
+    plotDiffs(sampleSizes, udiffs, 
+              'Sample SD vs Population SD',
+              'Uniform population')
+    plotDiffs(sampleSizes, ndiffs,
+              'Sample SD vs Population SD',
+              'Normal population')
+    plotDiffs(sampleSizes, ediffs,
+              'Sample SD vs Population SD',
+              'Exponential population')
+    pylab.show()
+# test
+# compareDists()
+
+popSize = (10000, 100000, 1000000)
+sampleSizes = range(20, 600, 1)
+for size in popSize:
+    population = []
+    for i in range(size):
+        population.append(random.expovariate(0.5))
+    ediffs = getDiffs(population, sampleSizes)
+    plotDiffs(sampleSizes, ediffs,
+             'Sample SD vs Population SD, Uniform',
+             'Population size = ' + str(size))
+    pylab.show()
