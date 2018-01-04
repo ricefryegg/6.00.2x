@@ -3,6 +3,7 @@
 import random
 import pylab
 
+random.seed(0)
 ''' 
 Begin helper code
 '''
@@ -34,31 +35,33 @@ class SimpleVirus(object):
         maxBirthProb: Maximum reproduction probability (a float between 0-1)        
         clearProb: Maximum clearance probability (a float between 0-1).
         """
-
-        # TODO
+        self.maxBirthProb = maxBirthProb
+        self.clearProb = clearProb
 
     def getMaxBirthProb(self):
         """
         Returns the max birth probability.
         """
-        # TODO
+        return self.maxBirthProb
 
     def getClearProb(self):
         """
         Returns the clear probability.
         """
-        # TODO
+        return self.clearProb
 
     def doesClear(self):
-        """ Stochastically determines whether this virus particle is cleared from the
+        """
+        Stochastically determines whether this virus particle is cleared from the
         patient's body at a time step. 
         returns: True with probability self.getClearProb and otherwise returns
         False.
         """
+        choice = random.choice([True, False])
+        if choice:
+            return True, self.getClearProb
+        return False
 
-        # TODO
-
-    
     def reproduce(self, popDensity):
         """
         Stochastically determines whether this virus particle reproduces at a
