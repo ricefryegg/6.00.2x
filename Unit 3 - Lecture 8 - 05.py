@@ -2,14 +2,14 @@ import random
 
 # Monte Carlo Simulation of Pi
 # behavior of a single trail
-def throwNeedles(numNeedles):
+def throwNeedles(numNeedless):
     inCircle = 0
-    for needles in range(1, numNeedles + 1, 1):
+    for needles in range(1, numNeedless + 1, 1):
         x = random.random()
         y = random.random()
         if (x*x + y*y) <= 1:
             inCircle += 1
-    fraction = inCircle / float(numNeedles)
+    fraction = inCircle / float(numNeedless)
     return 4 * fraction
 
 # get standard deviation
